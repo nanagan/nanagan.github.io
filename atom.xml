@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://nanagan.github.io</id>
     <title>Nana&apos;s Blog</title>
-    <updated>2021-02-20T20:30:16.013Z</updated>
+    <updated>2021-02-20T20:31:00.059Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://nanagan.github.io"/>
     <link rel="self" href="https://nanagan.github.io/atom.xml"/>
@@ -202,23 +202,17 @@ Tidying up remote @ Thu Jan 28 09:20:12 UTC 2021 (1611825612504)
         <summary type="html"><![CDATA[<p>注：本文并不百分百是原创，参考资料已经列在文章最下方。</p>
 <h2 id="本文的目标读者">本文的目标读者</h2>
 <p>对压力测试一无所知、但需要了解比较系统的压测知识的新手人群。</p>
-<h2 id="本文大纲内容">本文大纲内容</h2>
-<ol>
-<li>压力测试相关的基础概念</li>
-<li>常用压测工具的基本了解</li>
-<li>了解压测的基本流程</li>
-</ol>
 ]]></summary>
         <content type="html"><![CDATA[<p>注：本文并不百分百是原创，参考资料已经列在文章最下方。</p>
 <h2 id="本文的目标读者">本文的目标读者</h2>
 <p>对压力测试一无所知、但需要了解比较系统的压测知识的新手人群。</p>
+<!-- more -->
 <h2 id="本文大纲内容">本文大纲内容</h2>
 <ol>
 <li>压力测试相关的基础概念</li>
 <li>常用压测工具的基本了解</li>
 <li>了解压测的基本流程</li>
 </ol>
-<!-- more -->
 <h2 id="相关的基础概念">相关的基础概念</h2>
 <h3 id="软件测试的分类">软件测试的分类</h3>
 <p>软件测试如果按照<strong>是否查看代码</strong>分类，则可分为<strong>白盒测试</strong>、<strong>黑盒测试</strong>以及<strong>灰盒测试</strong>三类，其中黑盒测试又可分为<strong>功能测试</strong>与<strong>性能测试</strong>。我们这里主要探讨性能测试中的压力测试，而性能测试的具体分类如下：</p>
