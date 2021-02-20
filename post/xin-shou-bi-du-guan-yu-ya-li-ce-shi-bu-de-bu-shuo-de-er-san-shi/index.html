@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>【新手必读】关于压力测试不得不说的二三事 | Nana&#39;s Blog</title>
-<link rel="shortcut icon" href="https://nanagan.github.io/favicon.ico?v=1613847038284">
+<link rel="shortcut icon" href="https://nanagan.github.io/favicon.ico?v=1613847245266">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://nanagan.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="【新手必读】关于压力测试不得不说的二三事 | Nana&#39;s Blog - Atom Feed" href="https://nanagan.github.io/atom.xml">
@@ -12,7 +12,6 @@
 
 
     <meta name="description" content="注：本文并不百分百是原创，参考资料已经列在文章最下方。
-[TOC]
 本文的目标读者
 对压力测试一无所知、但需要了解比较系统的压测知识的新手人群。
 本文大纲内容
@@ -21,7 +20,8 @@
 常用压测工具的基本了解
 了解压测的基本流程
 
-相关的基..." />
+相关的基础概念
+软件..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -31,7 +31,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://nanagan.github.io">
-  <img class="avatar" src="https://nanagan.github.io/images/avatar.png?v=1613847038284" alt="">
+  <img class="avatar" src="https://nanagan.github.io/images/avatar.png?v=1613847245266" alt="">
   </a>
   <h1 class="site-title">
     Nana&#39;s Blog
@@ -98,8 +98,7 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>注：本文并不百分百是原创，参考资料已经列在文章最下方。<br>
-[TOC]</p>
+                <p>注：本文并不百分百是原创，参考资料已经列在文章最下方。</p>
 <h2 id="本文的目标读者">本文的目标读者</h2>
 <p>对压力测试一无所知、但需要了解比较系统的压测知识的新手人群。</p>
 <h2 id="本文大纲内容">本文大纲内容</h2>
@@ -221,7 +220,7 @@
 <ol>
 <li>
 <p>ab</p>
-<figure data-type="image" tabindex="2"><img src="https://yqfile.alicdn.com/0a2a5abadfdd5cd5cec414525cd1e08b485b7deb.png" alt="_1" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://ask.qcloudimg.com/http-save/5055839/4lytuzvi5m.png?imageView2/2/w/1620" alt="_1" loading="lazy"></figure>
 <p>ab（Apache Benchmark）是Apache公司提供的一款简单易上手的测试工具，一般用于测试web服务。它是一个命令行工具，对<strong>发起负载的本机要求很低</strong>，不会占用很多CPU或内存，<strong>但是会可能给目标服务器造成巨大的负载</strong>，其原理类似于<code>CC攻击</code>。它适用于本地对支持HTTP协议的单一地址进行性能压测。</p>
 <blockquote>
 <p>CC攻击（Challenge Collapsar）是针对web服务器或应用程序的攻击。原理是通过代理服务器或者大量肉鸡模拟多个用户访问目标网站的动态页面，制造大量的后台数据库查询动作，消耗目标CPU资源，造成拒绝服务。CC攻击的请求本身是正常的请求。</p>
@@ -231,7 +230,7 @@
 </li>
 <li>
 <p>LoadRunner</p>
-<figure data-type="image" tabindex="3"><img src="https://yqfile.alicdn.com/1cc0aeb276d1b03cd1c476b49df478dbb22e03df.png" alt="_2" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="https://ask.qcloudimg.com/http-save/5055839/kagak4sy5t.png?imageView2/2/w/1620" alt="_2" loading="lazy"></figure>
 <p>LoadRunner是HP公司提供的一款预测系统行为和性能的工业标准级测试工具，通过模拟成千上万个用户实施并发操作，测试系统的性能，并且提供详细的测试结果分析，协助用户查找问题。</p>
 <p>它的工作原理是用虚拟用户脚本生成器用代理方式接收客户端发送的数据包进行处理并转发给服务器端，再接收从服务器端返回的数据流进行处理并返回客户端，通过这种方式来模拟真实运行环境；在整个过程中实时监控采集控制台上的所有资源并捕获性能数据，最后将结果存储在数据库的储存库中。</p>
 <p>它基本包括了JMeter的常用功能，<strong>支持IP欺骗</strong>，优点是专业、稳定、高效，缺点是非开源免费，<strong>售价高</strong>，扩展性比较差。</p>
@@ -241,7 +240,7 @@
 </li>
 <li>
 <p>JMeter</p>
-<figure data-type="image" tabindex="4"><img src="https://yqfile.alicdn.com/8a29f8249fe483fef82c28b120be4d795fa84fab.png" alt="_3" loading="lazy"></figure>
+<figure data-type="image" tabindex="4"><img src="https://ask.qcloudimg.com/http-save/5055839/jui6fiyqzb.png?imageView2/2/w/1620" alt="_3" loading="lazy"></figure>
 <p>JMeter是Apache公司组织开发的基于Java的测试工具，最初被设计用于web应用测试，但后来扩展到了其他测试领域。它的功能与LoadRunner比较相似，工作原理也基本一致——JMeter通过线程组来模拟真实用户对服务器的访问压力，可以作为服务器与客户端之间的代理网关以捕获请求和响应。另外，JMeter能够对应用程序做<strong>功能/回归测试</strong>，通过创建带有断言的脚本来验证你的程序返回了你期望的结果。为了最大限度的灵活性，JMeter<strong>允许使用正则表达式创建断言</strong>。</p>
 <p>它是一款<strong>开源</strong>的免费软件，具有强大的开源社区支持，社区内开发者活跃程度高。它使用了<strong>图形界面</strong>，用户可以通过图形界面来编写测试用例，操作简单易上手；并且它体积小巧，不需要安装即可使用。</p>
 <p>它相比于LoadRunner的缺点是<strong>结果分析能力没有LR强</strong>，且<strong>不支持IP欺骗</strong>。并且JMeter的性能不太稳定，在高并发下观测结果集时容易遭成界面卡死或崩溃。</p>
