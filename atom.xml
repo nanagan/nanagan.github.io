@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://nanagan.github.io</id>
     <title>Nana&apos;s Blog</title>
-    <updated>2021-02-20T18:54:07.755Z</updated>
+    <updated>2021-02-20T18:56:05.531Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://nanagan.github.io"/>
     <link rel="self" href="https://nanagan.github.io/atom.xml"/>
@@ -90,15 +90,15 @@
 <h3 id="压测常用的性能指标">压测常用的性能指标</h3>
 <ul>
 <li>
-<p>**每秒处理事务（TPS，Transaction Per Second）**每秒系统处理事务（通过、失败以及停止）的数量。通过它可以确定系统在任何给定时刻的时间事务负载。</p>
+<p><strong>每秒处理事务（TPS，Transaction Per Second）</strong> 每秒系统处理事务（通过、失败以及停止）的数量。通过它可以确定系统在任何给定时刻的时间事务负载。</p>
 </li>
 <li>
-<p>**每秒查询率（QPS，Queries Per Second）**一台服务器每秒能够响应的查询次数。通过它可以确定系统的最大吞吐能力。</p>
+<p><strong>每秒查询率（QPS，Queries Per Second）</strong> 一台服务器每秒能够响应的查询次数。通过它可以确定系统的最大吞吐能力。</p>
 </li>
 <li>
-<p>**并发用户数（Number of Concurrent Users）**同一时间点请求服务器的用户数。</p>
+<p><strong>并发用户数（Number of Concurrent Users）</strong> 同一时间点请求服务器的用户数。</p>
 <ul>
-<li>**最佳并发用户数（The Optimum Number of Concurrent Users）**随着并发量的增加，吞吐量（每秒处理事务）不再相应增加，并且响应时间继续增长。</li>
+<li><strong>最佳并发用户数（The Optimum Number of Concurrent Users）</strong> 随着并发量的增加，吞吐量（每秒处理事务）不再相应增加，并且响应时间继续增长。</li>
 </ul>
 </li>
 <li>
