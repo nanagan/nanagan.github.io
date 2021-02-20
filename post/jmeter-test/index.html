@@ -1,0 +1,362 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>在Mac上利用压测工具Jmeter-Suite进行一次压测实践的保姆级详细步骤（参考腾讯云文章） | Nana&#39;s Blog</title>
+<link rel="shortcut icon" href="https://nanagan.github.io/favicon.ico?v=1613852862753">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://nanagan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="在Mac上利用压测工具Jmeter-Suite进行一次压测实践的保姆级详细步骤（参考腾讯云文章） | Nana&#39;s Blog - Atom Feed" href="https://nanagan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="##参考的文章
+压测工具Jmeter-Suite详细操作步骤
+##写此文的目的
+由于我是刚开始接触kubernetes和jmeter，所以在学习过程中遇到了很多很多问题，同时我很烦恼为什么网上没有文章是从真正零基础地记录部署的过程，比如安装..." />
+    <meta name="keywords" content="压测" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+      
+    <div id="comment"></div>
+    <span id="comment-count"></span>
+  <!--载入js，在</body>之前插入即可-->
+    <!--Leancloud 操作库:-->
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <!--Valine 的核心代码库-->
+    <script src="/media/scripts/Valine.min.js"></script>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://nanagan.github.io">
+  <img class="avatar" src="https://nanagan.github.io/images/avatar.png?v=1613852862753" alt="">
+  </a>
+  <h1 class="site-title">
+    Nana&#39;s Blog
+  </h1>
+  <p class="site-description">
+    鹅厂低级工程师（大雾
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              在Mac上利用压测工具Jmeter-Suite进行一次压测实践的保姆级详细步骤（参考腾讯云文章）
+            </h2>
+            <div class="post-info">
+              <span>
+                2021-02-21
+              </span>
+              <span>
+                12 min read
+              </span>
+              
+                <a href="https://nanagan.github.io/tag/L2_5xxyiA/" class="post-tag">
+                  # 压测
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>##参考的文章<br>
+<a href="https://cloud.tencent.com/developer/article/1776927">压测工具Jmeter-Suite详细操作步骤</a></p>
+<p>##写此文的目的<br>
+由于我是刚开始接触kubernetes和jmeter，所以在学习过程中遇到了很多很多问题，同时我很烦恼为什么网上没有文章是从真正<strong>零基础</strong>地记录部署的过程，比如安装brew和helm3之类的步骤都被省略了，像我这种菜菜就很抓瞎。所以在我终于摸到了kubernetes世界的大门、碰到了压测的边边后，我决定写一篇文章回馈菜菜们。</p>
+<!-- more -->
+<p>##需要的背景知识</p>
+<ul>
+<li>阅读《kubernetes权威指南》第一章  （不读也行，就是要了解kubernetes的基本概念，我个人觉得这本书写得不错）</li>
+<li>阅读 <a href="https://www.zhihu.com/column/p/26729512">JMeter介绍</a>   （了解jmeter的作用）</li>
+</ul>
+<p>##我的系统<br>
+<img src="https://img2020.cnblogs.com/blog/1943681/202101/1943681-20210128192542201-300916945.png" alt="" loading="lazy"></p>
+<p>##详细步骤<br>
+省略购买压测机器部分的内容，直接跳到<strong>压测工具安装</strong>部分开始 。<br>
+###1 安装brew</p>
+<blockquote>
+<p>brew是一个mac上面很好用的软件管理系统，可以简化mac上的安装过程。</p>
+</blockquote>
+<p>我用了一个知乎专栏上的自动化脚本，链接是<a href="https://zhuanlan.zhihu.com/p/111014448">Homebrew国内如何自动安装（国内地址）</a> ，真诚表白作者，原本下载速度很慢的，现在下载速度飞升 T^T<br>
+ps安装期间我遇到了各种问题，因为我原本的mac系统很低，安装了低版本的brew，不知道啥原因死活装不上新版本，我干脆重新装了个机，重新安装，就非常顺利</p>
+<p>###2 安装wget</p>
+<blockquote>
+<p>Linux系统上一个下载文件的工具。</p>
+</blockquote>
+<p>其实我感觉它的功能和brew挺像的，但由于我参考的文章里用了wget那我就用吧（）<br>
+用<code>brew install wget</code>命令，我在这一步很顺利，省略之 。</p>
+<p>###3 安装helm</p>
+<blockquote>
+<p>Helm 是Deis 开发的一个用于Kubernetes 应用的包管理工具，主要用来管理Charts。<br>
+chart 是描述相关的一组Kubernetes资源的文件集合。单个chart可能用于部署简单的东西，比如memcached pod，或者一些复杂的东西，比如完整的具有HTTP 服务，数据库，缓存等的Web 应用程序堆栈。chart通过创建为特定目录树的文件，将它们打包到版本化的压缩包，然后进行部署。</p>
+</blockquote>
+<p>按照文档上的操作，我在运行完</p>
+<pre><code>wget https://get.helm.sh/helm-v3.2.1-linux-amd64.tar.gz 
+tar -zxvf helm-v3.2.1-linux-amd64.tar.gz 
+cp linux-amd64/helm /usr/local/bin/
+</code></pre>
+<p>后，出现了<code>zsh: exec format error: helm</code>的报错 ，简单搜索了一下，似乎是无法解析文件？于是我又重新进行安装helm的操作，也就是运行<code>brew install kubernetes-helm</code>，又出现了错误。</p>
+<pre><code>Error: The `brew link` step did not complete successfully
+The formula built, but is not symlinked into /usr/local
+Could not symlink bin/helm
+Target /usr/local/bin/helm
+already exists. You may want to remove it:
+  rm '/usr/local/bin/helm'
+</code></pre>
+<p>原因似乎是之前已经装了一次helm，文件重复了<br>
+于是我按照提示，运行</p>
+<pre><code>rm '/usr/local/bin/helm'
+brew link helm
+brew install kubernetes-helm
+</code></pre>
+<p>安装helm的过程到此结束。</p>
+<p>###4 安装kubectl</p>
+<blockquote>
+<p>kubectl是Kubernetes 命令行工具，使得你可以对 Kubernetes 集群运行命令。 你可以使用 kubectl 来部署应用、监测和管理集群资源以及查看日志。</p>
+</blockquote>
+<p>由于前面我们已经安装了brew，所以可以直接运行<code>brew install kubectl</code> 。<br>
+再运行<code>kubectl version</code>来确定是否安装成功，当出现类似于</p>
+<pre><code>Client Version: version.Info{Major:&quot;1&quot;, Minor:&quot;20&quot;, GitVersion:&quot;v1.20.2&quot;, GitCommit:&quot;faecb196815e248d3ecfb03c680a4507229c2a56&quot;, GitTreeState:&quot;clean&quot;, BuildDate:&quot;2021-01-14T05:14:17Z&quot;, GoVersion:&quot;go1.15.6&quot;, Compiler:&quot;gc&quot;, Platform:&quot;darwin/amd64&quot;}
+Server Version: version.Info{Major:&quot;1&quot;, Minor:&quot;18+&quot;, GitVersion:&quot;v1.18.4-tke.3&quot;, GitCommit:&quot;f8797eb035aca9c928af02ea9a74d232cfd41bc6&quot;, GitTreeState:&quot;clean&quot;, BuildDate:&quot;2020-10-12T03:32:01Z&quot;, GoVersion:&quot;go1.14.8&quot;, Compiler:&quot;gc&quot;, Platform:&quot;linux/amd64&quot;}
+</code></pre>
+<p>的代码时说明已经安装成功啦。</p>
+<p>###5 部署压测集群<br>
+接着按照文章的内容，运行</p>
+<pre><code>git clone https://github.com/tkestack/charts.git
+cd charts/
+helm install your-name incubator/jmeter-suite  （这里的your-name请更改为自己给服务取的名字）
+</code></pre>
+<p>然后出现报错</p>
+<pre><code>Error: Kubernetes cluster unreachable: 
+Get &quot;http://localhost:8080/version?timeout=32s&quot;: dial tcp 127.0.0.1:8080: connect: connection refused
+</code></pre>
+<p>这里要配置环境变量KUBECONFIG，需要运行<code>export KUBECONFIG=集群配置文件的路径</code>，但这个配置是一次性的，终端窗口一关闭或者新开一个终端窗口 就需要重新配置，如果需要更改全局的环境变量需要更改<code>~/.bash_profile</code>文件。</p>
+<p>然后解决完上面这个报错后，再重新运行<code>helm install your-name incubator/jmeter-suite</code> ，随后又出现了报错</p>
+<pre><code>Error: rendered manifests contain a resource that already exists. 
+Unable to continue with install: ServiceAccount &quot;jmeter-influxdb&quot; in namespace &quot;default&quot; exists and cannot be imported into the current release: invalid ownership metadata; 
+annotation validation error: missing key &quot;meta.helm.sh/release-name&quot;: must be set to &quot;test&quot;; annotation validation error: missing key &quot;meta.helm.sh/release-namespace&quot;: must be set to &quot;default&quot;
+</code></pre>
+<p>呃大概意思就是本地 已经有了一个namespace为default的jmeter了，解决这个错误挺简单</p>
+<ul>
+<li>1 运行<code>helm list --all --all-namespaces</code>，查看系统里所有的releases。</li>
+<li>2 运行 <code>helm uninstall jmeter -n default</code>，卸载这个namespace为default的jmeter。</li>
+</ul>
+<p>随后便可以安装jmeter了，重新运行<code>helm install your-name incubator/jmeter-suite</code> ，这次成功了，随后出现</p>
+<pre><code>NAME: test
+LAST DEPLOYED: Wed Jan 27 17:18:21 2021
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+</code></pre>
+<p>###6 编写脚本<br>
+####打开jmeter工具<br>
+在<a href="http://jmeter.apache.org/download_jmeter.cgi">Jmeter官网</a>下载好jmeter，我下载的是如图的黑色字体版本。<br>
+<img src="https://img2020.cnblogs.com/blog/1943681/202101/1943681-20210128112808907-709044756.png" alt="" loading="lazy"></p>
+<p>接着我双击/bin目录下的ApacheJMeter.jar文件，打不开。就算把电脑的那个安全性提醒关掉也打不开，好吧，运行下面的命令强制打开<br>
+<code>java -jar /Users/chrystal/Documents/apache-jmeter-5.4.1\ 2/bin/ApacheJMeter.jar (请把后面的路径改为自己存放文件的路径)</code><br>
+此时命令行如下图<br>
+<img src="https://img2020.cnblogs.com/blog/1943681/202101/1943681-20210128153435642-204495638.png" alt="" loading="lazy"><br>
+这说明！不能用这个窗口来跑测试脚本！所以我们要新开一个终端窗口进行后面的操作。<strong>新开的终端窗口记得配置kubernetes环境变量。</strong></p>
+<p>该jar包打开的界面如下<br>
+<img src="https://img2020.cnblogs.com/blog/1943681/202101/1943681-20210128113245718-1612241731.png" alt="" loading="lazy"></p>
+<p>可以把原文章中提到的demo测试脚本用它打开，如图<br>
+<img src="https://img2020.cnblogs.com/blog/1943681/202101/1943681-20210128113956129-1944218852.png" alt="" loading="lazy"></p>
+<p>接下来参考demo脚本写一个自己的脚本，具体的基础设置解释在原文章里有。那么测试一下<a href="https://home.cnblogs.com/blog/">博客园</a>的接口吧。</p>
+<p>####设置脚本<br>
+在jmeter处新建个文件，添加线程组<br>
+<img src="https://img2020.cnblogs.com/blog/1943681/202101/1943681-20210128153845661-1981468078.png" alt="" loading="lazy"><br>
+下面红框处是我更改后的配置，重要的是我设置了5000个线程，循环2次。*<em>（<em>我后来改了，因为线程组太多了，测试停不下来，改成了50x200）</em></em><br>
+<img src="https://img2020.cnblogs.com/blog/1943681/202101/1943681-20210128154430799-1150394626.png" alt="" loading="lazy"><br>
+右键线程组，添加http请求，并设置IP地址。<br>
+<img src="https://img2020.cnblogs.com/blog/1943681/202101/1943681-20210128154726479-1291219254.png" alt="" loading="lazy"><br>
+<img src="https://img2020.cnblogs.com/blog/1943681/202101/1943681-20210128154932494-1538521586.png" alt="" loading="lazy"><br>
+到这里我们基本配置好了线程组的内容，也就是说我们在这次测试中会向博客园发送10000个http请求来测试它的承受能力，但是我们还需要对返回的结果进行分析，所以还要再添加一些监听器来处理结果。</p>
+<ul>
+<li>添加后端监听器<br>
+<img src="https://img2020.cnblogs.com/blog/1943681/202101/1943681-20210128160255678-365071639.png" alt="" loading="lazy"><br>
+对其进行简单设置<br>
+<img src="https://img2020.cnblogs.com/blog/1943681/202101/1943681-20210128171407839-982811206.png" alt="" loading="lazy"></li>
+<li>添加察看结果树<br>
+<img src="https://img2020.cnblogs.com/blog/1943681/202101/1943681-20210128155849233-319381560.png" alt="" loading="lazy"><br>
+自己喜欢啥就添加啥吧，我感觉作用都差不多，在这里我添加了<strong>察看结果树</strong>和<strong>汇总图</strong>。</li>
+</ul>
+<p>配置完所有东西后，我们运行一下脚本看看有无错误。<br>
+果然有错误啊，我的人生果然不会这么一帆风顺啊（）运行一会儿很快就退出了，点击察看结果树出来的全是错误，<br>
+<img src="https://img2020.cnblogs.com/blog/1943681/202101/1943681-20210128162605380-123415813.png" alt="" loading="lazy"><br>
+然后点击响应数据去查看返回了啥错误<br>
+<img src="https://img2020.cnblogs.com/blog/1943681/202101/1943681-20210128163131165-971324307.png" alt="" loading="lazy"><br>
+这里说请求的host的格式错误。经过我的一番研究，原来我在上面的设置IP地址时直接复制了博客园的主页，包含了特殊符号。也就是说具体的路径不能写在服务器IP地址那里，正确写法应该是这样<br>
+<img src="https://img2020.cnblogs.com/blog/1943681/202101/1943681-20210128164451383-1237225730.png" alt="" loading="lazy"><br>
+改完以后再运行，就非常顺利，如图<br>
+<img src="https://img2020.cnblogs.com/blog/1943681/202101/1943681-20210128165055353-1436304318.png" alt="" loading="lazy"></p>
+<p>脚本编写到此完成！</p>
+<p>###7 发起测试<br>
+运行<code>kubectl get pods</code>确认一下有没有连接到kubernetes集群，出现了类似于</p>
+<pre><code>NAME                                              READY   STATUS    RESTARTS   AGE
+jmeter-influxdb-0                                 1/1     Running   0          23h
+test-distributed-jmeter-master-77749c5845-89c6w   1/1     Running   0          23h
+test-distributed-jmeter-server-5556bbf5fc-2hxvg   1/1     Running   0          23h
+test-distributed-jmeter-server-5556bbf5fc-fztws   1/1     Running   0          23h
+test-distributed-jmeter-server-5556bbf5fc-lmsdw   1/1     Running   0          23h
+test-grafana-584875d9d4-zsfzz                     1/1     Running   0          23h
+</code></pre>
+<p>的内容就是连接成功了。<br>
+然后运行<code>sh start_test.sh 你的文件目录</code>，就可以在集群上进行测试了。</p>
+<p>###8 查看结果<br>
+运行完成以后终端窗口会出现</p>
+<pre><code>Creating summariser &lt;summary&gt;
+Created the tree successfully using /jmeter/test2.jmx
+Configuring remote engine: 192.168.0.131
+Configuring remote engine: 192.168.0.189
+Configuring remote engine: 192.168.0.134
+Starting distributed test with remote engines: [192.168.0.189, 192.168.0.134, 192.168.0.131] @ Thu Jan 28 09:16:07 UTC 2021 (1611825367766)
+Remote engines have been started:[192.168.0.189, 192.168.0.134, 192.168.0.131]
+Waiting for possible Shutdown/StopTestNow/HeapDump/ThreadDump message on port 4445
+summary +   3104 in 00:00:22 =  143.4/s Avg:   598 Min:    40 Max: 16565 Err:     6 (0.19%) Active: 150 Started: 150 Finished: 0
+summary +   4400 in 00:00:30 =  146.3/s Avg:   772 Min:    41 Max: 32547 Err:     4 (0.09%) Active: 150 Started: 150 Finished: 0
+summary =   7504 in 00:00:52 =  145.1/s Avg:   700 Min:    40 Max: 32547 Err:    10 (0.13%)
+summary +   4600 in 00:00:31 =  150.6/s Avg:   854 Min:    40 Max: 64926 Err:     7 (0.15%) Active: 149 Started: 150 Finished: 1
+summary =  12104 in 00:01:22 =  147.1/s Avg:   759 Min:    40 Max: 64926 Err:    17 (0.14%)
+summary +   4400 in 00:00:30 =  149.0/s Avg:   742 Min:    42 Max: 68044 Err:     2 (0.05%) Active: 132 Started: 150 Finished: 18
+summary =  16504 in 00:01:52 =  147.6/s Avg:   754 Min:    40 Max: 68044 Err:    19 (0.12%)
+summary +   4500 in 00:00:30 =  150.5/s Avg:  1100 Min:    42 Max: 131100 Err:    13 (0.29%) Active: 98 Started: 150 Finished: 52
+summary =  21004 in 00:02:22 =  148.2/s Avg:   828 Min:    40 Max: 131100 Err:    32 (0.15%)
+summary +   4600 in 00:00:30 =  153.0/s Avg:   801 Min:    41 Max: 130543 Err:    11 (0.24%) Active: 51 Started: 150 Finished: 99
+summary =  25604 in 00:02:52 =  149.1/s Avg:   823 Min:    40 Max: 131100 Err:    43 (0.17%)
+summary +   4396 in 00:01:12 =   61.0/s Avg:   438 Min:    40 Max: 131063 Err:     7 (0.16%) Active: 0 Started: 150 Finished: 150
+summary =  30000 in 00:04:04 =  123.0/s Avg:   767 Min:    40 Max: 131100 Err:    50 (0.17%)
+Tidying up remote @ Thu Jan 28 09:20:12 UTC 2021 (1611825612504)
+... end of run
+</code></pre>
+<p>然后原文章很详细地写了如何查看结果，这里省略。</p>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://nanagan.github.io/post/stress-testing/">
+              <h3 class="post-title">
+                【新手必读】关于压力测试不得不说的二三事
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          <div class="comment"></div>
+            <script>
+                new Valine({
+                    av: AV,
+                    el: '.comment',
+                      lang: 'zh-cn',//设置评论语言
+                    emoticon_url: 'https://cloud.panjunwen.com/alu',
+              emoticon_list: ["狂汗.png","不说话.png","汗.png","坐等.png","献花.png","不高兴.png","中刀.png","害羞.png","皱眉.png","小眼睛.png","暗地观察.png"],
+              app_id: 'Fwb8Sh0if5a89ivip2D7ltLE-gzGzoHsz',
+              app_key: 'yKd7GvF6flIjh1opobdCmzdI',
+              placeholder: '欢迎评论留言👏'
+                });
+            </script>
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://nanagan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
