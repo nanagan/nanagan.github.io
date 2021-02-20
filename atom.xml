@@ -2,11 +2,14 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://nanagan.github.io</id>
     <title>Nana&apos;s Blog</title>
-    <updated>2021-02-20T20:17:29.952Z</updated>
+    <updated>2021-02-20T20:24:31.031Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://nanagan.github.io"/>
     <link rel="self" href="https://nanagan.github.io/atom.xml"/>
-    <subtitle>腾讯低级实习生</subtitle>
+    <subtitle>鹅鹅鹅/
+我爱写博客/
+就算写得水/
+也要乐一波/</subtitle>
     <logo>https://nanagan.github.io/images/avatar.png</logo>
     <icon>https://nanagan.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Nana&apos;s Blog</rights>
