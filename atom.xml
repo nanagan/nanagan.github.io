@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://nanagan.github.io</id>
     <title>Nana&apos;s Blog</title>
-    <updated>2021-02-23T07:54:00.603Z</updated>
+    <updated>2021-02-23T07:57:57.784Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://nanagan.github.io"/>
     <link rel="self" href="https://nanagan.github.io/atom.xml"/>
@@ -12,8 +12,8 @@
     <rights>All rights reserved 2021, Nana&apos;s Blog</rights>
     <entry>
         <title type="html"><![CDATA[浅谈不同压测平台的使用体验（对比JMeter）]]></title>
-        <id>https://nanagan.github.io/post/qian-tan-bu-tong-ya-ce-ping-tai-de-shi-yong-ti-yan-dui-bi-jmeter/</id>
-        <link href="https://nanagan.github.io/post/qian-tan-bu-tong-ya-ce-ping-tai-de-shi-yong-ti-yan-dui-bi-jmeter/">
+        <id>https://nanagan.github.io/post/18246586/</id>
+        <link href="https://nanagan.github.io/post/18246586/">
         </link>
         <updated>2021-02-23T07:50:15.000Z</updated>
         <content type="html"><![CDATA[<h1 id="压测平台是什么">压测平台是什么？</h1>

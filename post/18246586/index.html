@@ -1,0 +1,607 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>浅谈不同压测平台的使用体验（对比JMeter） | Nana&#39;s Blog</title>
+
+<link rel="shortcut icon" href="https://nanagan.github.io/favicon.ico?v=1614067074588">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://nanagan.github.io/styles/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Nana&#39;s Blog
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1614067074588" action="/search/index.html">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    浅谈不同压测平台的使用体验（对比JMeter）
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2021-02-23 ·
+                    </time>
+                    
+                        <a href="https://nanagan.github.io/tag/L2_5xxyiA/" class="post-tags">
+                            # 压测
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <h1 id="压测平台是什么">压测平台是什么？</h1>
+<p>压测，即压力测试，作用是对各种服务对象进行压力测试以获得该服务处于或<strong>超过预期负载</strong>时系统的运行情况，进而判断系统在峰值负载或超出最大负载情况下的处理能力。</p>
+<p>压测工具，顾名思义，就是用来进行压力测试的工具，常用的有ab、jmeter、LoadRunner和wrk等等。</p>
+<p>而由于在整个压测过程中存在以下问题：</p>
+<ul>
+<li>
+<p><strong>时间成本</strong>：每次测试都需要重新搭建一套生产环境，成本太高，且几乎每个环节都需要人力支撑</p>
+</li>
+<li>
+<p><strong>数据成本</strong>：脚本、测试数据、压测机器、测试报告无法沉淀</p>
+</li>
+<li>
+<p><strong>风险成本</strong>：测试用例多，生产压测缺乏平台流程管理，手工执行非常容易出错</p>
+</li>
+<li>
+<p><strong>自动化问题</strong>：自动化性能基线无统一平台支撑，测试过程中靠手动监控，覆盖不全且定位问题困难</p>
+</li>
+</ul>
+<p>为了解决以上这些问题、更好地满足自己/用户的压测需求，不少企业在开源压测工具的基础上进行二次开发，将压测流程管控、压测任务管理和自动化性能基线等功能整合在一起，形成一个可以支撑各种个性化压测需求的分布式业务系统，也就是压测平台。</p>
+<h1 id="本文主要讲什么">本文主要讲什么？</h1>
+<p>本文浅显地分析了不同压测平台的使用体验，并与经典压测工具JMeter进行对比。</p>
+<p>主要对比的指标有：</p>
+<ul>
+<li>是否适合新手使用</li>
+<li>UI界面是否符合用户操作习惯</li>
+<li>压测部分的功能是否齐全，足够满足用户的各种需求</li>
+<li>结果分析的报告是否全面</li>
+<li>社区建设是否丰富</li>
+</ul>
+<h1 id="性能测试pts阿里云">性能测试PTS（阿里云）</h1>
+<p>性能测试 PTS（Performance Testing Service）是阿里云推出的一款具备分布式压测能力的SaaS压测平台。与普遍使用的压测工具相比，PTS所宣传的特点有：</p>
+<ol>
+<li>
+<p>施压流量来自真实CDN节点</p>
+<p>在PTS服务中进行施压配置时，可以选择<strong>国内公网</strong>和<strong>阿里云内网</strong>两种模式来设置压力来源。在国内公网模式中，PTS服务会分配来自全国各地的公网IP，并且根据压测的量级来分配对应的节点资源（IP），压力来源足够分散，可以最大程度模拟真实流量的路径。</p>
+</li>
+<li>
+<p>纯SaaS平台，使用时无需额外安装和部署</p>
+<blockquote>
+<p>SaaS（Software as a service）软件即服务，也就是说，软件的服务器在云端，可以通过网络提供服务。</p>
+</blockquote>
+<p>阿里云将PTS所有服务都web化，用户可以直接在阿里云上的控制台里进行压测操作。</p>
+</li>
+<li>
+<p>兼容JMeter脚本，可以平滑复用jmx脚本文件</p>
+<p>除了使用阿里云自研的压测引擎外，还可以使用原生JMeter引擎进行压测，直接导入jmx脚本文件即可。有个需要注意的地方是<strong>JMeter压测功能和PTS原生功能共享并发用户数的额度</strong>。</p>
+</li>
+<li>
+<p>配置界面所见即所得，对新手友好</p>
+<p>从配置场景，发起测试，到最后的查看结果报告，几乎所有步骤都可以都可以在网页上进行（除非你要使用jmx脚本）；并且在配置场景时，用户可以直接零编码在PTS上进行场景的可视化编排。</p>
+</li>
+<li>
+<p>覆盖主流浏览器的录制插件</p>
+<p>用户可以在浏览器上模拟压测场景的操作，浏览器中的插件会录制下压测请求URL（包括Header、Body等信息），录制后的内容可以导出为YAML脚本或者JSON脚本。</p>
+</li>
+</ol>
+<p><strong>以下是与JMeter相对比的情况：</strong></p>
+<ul>
+<li>
+<p>是否适合新手使用</p>
+<p>适合。</p>
+<p>由于PTS的所有操作都可以在网页上进行，用户可以直观地配置各类设置，网站上的文档也介绍得十分清晰，所以很多并不熟悉压测是什么的新手用户也可以轻松使用PTS；但是如果要使用JMeter，新手用户还需要学会如何编写脚本，如何设置参数，如何查看结果等操作。</p>
+</li>
+<li>
+<p>UI操作界面是否符合用户使用习惯</p>
+<p>以我的个人感受来说，是。</p>
+<p>评判标准是①没有会令用户产生歧义的地方，②常用的按钮都在用户习惯的位置（比如说保存按钮固定在页面的最下方等），③当鼠标移到部分按钮上时，会以浮窗的方式提示用户此操作会产生的结果，如下图</p>
+<p>![image-20210219144023684](/Users/nanagan/Library/Application Support/typora-user-images/image-20210219144023684.png)</p>
+</li>
+<li>
+<p>压测部分的功能是否齐全，足够满足用户的各种需求</p>
+<p>是。</p>
+<p>以下是对PTS和JMeter的一个功能对比。</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">功能</th>
+<th style="text-align:center">性能测试PTS</th>
+<th style="text-align:center">JMeter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">自定义API</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+</tr>
+<tr>
+<td style="text-align:left">设置出参</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+</tr>
+<tr>
+<td style="text-align:left">配置检查点</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+</tr>
+<tr>
+<td style="text-align:left">使用函数/文件参数/自定义参数</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+</tr>
+<tr>
+<td style="text-align:left">添加思考时间</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+</tr>
+<tr>
+<td style="text-align:left">添加集合点</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+</tr>
+<tr>
+<td style="text-align:left">添加条件跳转</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+</tr>
+<tr>
+<td style="text-align:left">添加数据指令</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+</tr>
+<tr>
+<td style="text-align:left">使用模版配置压测场景</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">N</td>
+</tr>
+<tr>
+<td style="text-align:left">查看离线报告</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+</tr>
+<tr>
+<td style="text-align:left">容量预估</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">N</td>
+</tr>
+<tr>
+<td style="text-align:left">压力预估</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">N</td>
+</tr>
+<tr>
+<td style="text-align:left">创建SLA</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">N</td>
+</tr>
+<tr>
+<td style="text-align:left">压测调速</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">N</td>
+</tr>
+<tr>
+<td style="text-align:left">定时压测</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+</tr>
+<tr>
+<td style="text-align:left">脚本录制</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+</tr>
+<tr>
+<td style="text-align:left">支持的脚本</td>
+<td style="text-align:center">jmx、json、yaml</td>
+<td style="text-align:center">jmx</td>
+</tr>
+</tbody>
+</table>
+<p>​	从表格中我们可以看到，其实PTS的大部分功能用JMeter都可以实现，但是在JMeter上使用这些功能时对新手不太友好，而PTS就非常直观地把这些功能都做成了网页上的选项，用户只需要鼠标轻点就可以轻松使用。</p>
+<ul>
+<li>
+<p>结果分析的报告是否全面</p>
+<p>是。</p>
+<p>PTS的一大优点是压测报告中的指标非常详细，排版清楚，方便用户阅读；并且有一些grafana上没有的功能，如下：</p>
+<ol>
+<li>
+<p>PTS会统计每个请求所返回的响应码，并给出每个时间点的统计结果![image-20210219165158993](/Users/nanagan/Library/Application Support/typora-user-images/image-20210219165158993.png)</p>
+</li>
+<li>
+<p>PTS会统计所有返回的错误信息![image-20210219165406640](/Users/nanagan/Library/Application Support/typora-user-images/image-20210219165406640.png)</p>
+</li>
+</ol>
+<p>其他没有提及的大部分功能，grafana上也有，但是不太直观；如PTS和grafana都有调整时间轴更好地分析某一时间段具体的数据的功能，只是grafana上的拉取与缩放时间轴并不太方便。</p>
+</li>
+<li>
+<p>社区建设是否丰富</p>
+<p>是。</p>
+<p>PTS官方网站上的文档已经十分详细，并且网络上有许多关于PTS使用心得的博客，总体来说资源非常多。JMeter的文档是英文的，虽然国内有人对其进行了翻译，但是对英文不好的用户来说还是需要多费一些功夫；但是网上也有许多JMeter相关的文章，只是找资料的时候需要多多挖掘。</p>
+</li>
+</ul>
+<h2 id="云性能测试服务cpts华为云">云性能测试服务CPTS（华为云）</h2>
+<p>一项为基于HTTP/HTTPS/TCP/UDP等协议构建的云应用提供性能测试的分布式压测服务。与上文提到的PTS相似，CPTS同样支持快速模拟大规模并发用户的真实业务高峰场景，也可以很好地支持报文内容和时序自定义、多事务组合的复杂场景测试。它所宣传的特点有：</p>
+<ol>
+<li>
+<p>低成本的超高并发模拟</p>
+<p>可以利用单压测机实现万级并发。</p>
+</li>
+<li>
+<p>测试任务模型自定义</p>
+<p>CPTS引入了“事务”的概念，和PTS中的“串联链路”有一些相似——用户可以定义自己的事务库，并且用户所创建的事务可以被多个测试任务复用，同时每个事务还可以定义多个测试阶段，最大程度地模拟流量起伏的复杂场景。</p>
+</li>
+<li>
+<p>压测资源管理，按需使用</p>
+<p>与PTS中压测集群由控制中心统一调度的情况不同，CPTS支持用户按需创建测试集群，并实现租户间流量隔离。另外在测试期间用户也可以实施扩容、缩容测试集群，升级测试能力等等。</p>
+</li>
+</ol>
+<p><strong>以下是与JMeter相对比的情况：</strong></p>
+<ul>
+<li>
+<p>是否适合新手使用</p>
+<p>比较适合。</p>
+<p>CPTS和PTS的操作界面有一些相似，操作逻辑也差不多，但是PTS的文档要比CPTS的文档更细致，也对新手更友好。CPTS中有些概念很容易让用户混淆，如“事务”、“用例”与“请求”，文档上也没有详细介绍。新手用户自己摸索着也可以摸索出使用方法，但是要费些功夫。</p>
+</li>
+<li>
+<p>UI操作界面是否符合用户使用习惯</p>
+<p>以我的个人感受来说，符合。</p>
+<p>和PTS相似，在操作上没有什么会令用户产生疑问或歧义的地方。</p>
+</li>
+<li>
+<p>压测部分的功能是否齐全，足够满足用户的各种需求</p>
+<p>CPTS的功能比较齐全，以下是对CPTS和JMeter的一个功能对比。</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th style="text-align:center">云性能测试服务CPTS</th>
+<th style="text-align:center">JMeter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>自定义API</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+</tr>
+<tr>
+<td>设置出参</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+</tr>
+<tr>
+<td>配置检查点</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+</tr>
+<tr>
+<td>使用函数/文件参数/自定义参数</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+</tr>
+<tr>
+<td>添加思考时间</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+</tr>
+<tr>
+<td>添加集合点</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+</tr>
+<tr>
+<td>添加条件跳转</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+</tr>
+<tr>
+<td>添加数据指令</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+</tr>
+<tr>
+<td>使用模版创建压测场景</td>
+<td style="text-align:center">N</td>
+<td style="text-align:center">N</td>
+</tr>
+<tr>
+<td>查看离线报告</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+</tr>
+<tr>
+<td>容量预估</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">N</td>
+</tr>
+<tr>
+<td>压力预估</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">N</td>
+</tr>
+<tr>
+<td>创建SLA</td>
+<td style="text-align:center">N</td>
+<td style="text-align:center">N</td>
+</tr>
+<tr>
+<td>压测调速</td>
+<td style="text-align:center">N</td>
+<td style="text-align:center">N</td>
+</tr>
+<tr>
+<td>定时压测</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+</tr>
+<tr>
+<td>脚本录制</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+</tr>
+<tr>
+<td>绑定域名</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+</tr>
+<tr>
+<td>支持原生JMeter压测</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">/</td>
+</tr>
+<tr>
+<td>支持的脚本</td>
+<td style="text-align:center">jmx、json、swagger</td>
+<td style="text-align:center">jmx</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p>结果分析的报告是否全面</p>
+<p>是。</p>
+<p>CPTS的报告也比较详细，同时UI界面也非常舒服。有一些功能和PTS类似，算是各有千秋。特色功能如下：</p>
+<ol>
+<li>
+<p>CPTS也会统计每个异常的响应信息并直观地展现出来</p>
+<p>![image-20210219170048075](/Users/nanagan/Library/Application Support/typora-user-images/image-20210219170048075.png)</p>
+</li>
+<li>
+<p>CPTS上的响应状态分布图比grafana多了更多数据</p>
+<p>![image-20210219170200880](/Users/nanagan/Library/Application Support/typora-user-images/image-20210219170200880.png)</p>
+</li>
+</ol>
+</li>
+<li>
+<p>社区建设是否丰富</p>
+<p>不太丰富。</p>
+<p>首先，CPTS的官方网站内容不是很多；其次，网上也没有几篇关于使用CPTS的文章（除了官方自己发的以外）。</p>
+<p>![image-20210219161538578](/Users/nanagan/Library/Application Support/typora-user-images/image-20210219161538578.png)![image-20210219161623048](/Users/nanagan/Library/Application Support/typora-user-images/image-20210219161623048.png)</p>
+<p>如上图，可以看出JMeter的网络资源明显更加丰富，在这点上JMeter对用户更加友好。</p>
+</li>
+</ul>
+<h2 id="其他类的压测平台">其他类的压测平台</h2>
+<p>市场上还有部分压测平台并不像PTS和CPTS那样同时面向个人用户和企业用户，它们一般只为企业用户服务，所以我单独把它们列了出来。</p>
+<ol>
+<li>
+<p>WeTest压测大师</p>
+<p>压测大师的优势主要有</p>
+<ul>
+<li>依靠腾讯云提供压力源，并不需要额外配置压力机，同时云端压力稳定无上限</li>
+<li>有腾讯专家在线指导并且会定期开展性能测试培训或沙龙等</li>
+</ul>
+<p>但是压测大师的官网上并没有提供体验入口，所以无从得知其服务细节（只能评价一下官网页面做得挺好看的）。</p>
+<figure data-type="image" tabindex="1"><img src="/Users/nanagan/Desktop/111.png" alt="111" loading="lazy"></figure>
+<p>如果点击【联系客服】，则会转到网页咨询窗口，并提供人工客服选项，联系官方还是比较方便的。</p>
+</li>
+<li>
+<p>全链路压测ForceCop</p>
+<p>ForceCop主打<strong>业务零侵入</strong>、<strong>多语言支持</strong>、<strong>立体监控</strong>等特点，主要的压测功能都有具备，并且附上了客户案例。</p>
+<p>但是如果想要体验ForceCop的服务，需要填写申请表。</p>
+<p>![image-20210219172400014](/Users/nanagan/Library/Application Support/typora-user-images/image-20210219172400014.png)</p>
+</li>
+<li>
+<p>压测宝</p>
+<p>压测宝的官网上信息就没有那么丰富了，只大概提了一下产品的特点，在客户案例部分阐述得比较多，但也没有看出产品的优势具体在什么地方。想要体验服务同样需要申请。</p>
+<p>![image-20210219172859797](/Users/nanagan/Library/Application Support/typora-user-images/image-20210219172859797.png)</p>
+</li>
+<li>
+<p>云压力测试平台 CPT</p>
+<p>CPT是睿象云公司的产品，该公司的主要业务其实是提供高效智能的跨云监控和告警管理服务，云压测服务并不是它们主推的功能。其实个人也可以体验它们的服务，但是由于想说的内容比较少，于是把它放在最后。在体验过程中我有以下几点感受：</p>
+<ul>
+<li>UI界面对用户不太友好</li>
+<li>“测试任务”部分操作比较简单，但是“编写脚本”部分很让人费解</li>
+<li>与上文的CPTS和PTS相比，没有很特色的功能，用JMeter可以完全替代</li>
+<li>压测时可以选择流量所在地域（虽然只有三个选项）</li>
+</ul>
+<p>不过它的文档还算详细，在搜索引擎上也能找到挺多相关文章的（要比CPTS多），算是它的一个优点。</p>
+</li>
+</ol>
+<h2 id="总结">总结</h2>
+<p>总的来说，衡量一个压测平台的指标大概有以下几项：</p>
+<ul>
+<li>学习成本</li>
+<li>安装部署成本</li>
+<li>是否免费</li>
+<li>是否支持多协议</li>
+<li>压测结果图形化展示</li>
+<li>是否支持TPS模式</li>
+<li>是否有链路、场景编排管理支持</li>
+<li>是否支持场景录制</li>
+<li>生态环境</li>
+<li>监控指标是否完备</li>
+<li>是否支持原生</li>
+<li>是否支持流量地域定制</li>
+</ul>
+<p>JMeter的优势在于<strong>免费</strong>、学习成本低、拥有绝大部分用户所需要的功能、生态环境良好等；其他云压测平台主要的优点有<strong>操作简单</strong>、<strong>功能强大</strong>等，但是一般收费都比较昂贵。</p>
+<p>从以上的多个平台的分析中，JMeter可以有哪方面的改进：</p>
+<ol>
+<li>在JMeter上编写脚本虽然并不是太难，但是如果简化了这一过程则可以大大减少用户的学习成本，可以吸引更多新用户。</li>
+<li>在结果分析报告部分，JMeter可以增加一些对响应数据的分析，使用户可以直观地找出返回了什么错误的响应代码，更快速地处理问题</li>
+<li>grafana有很多功能，但是它的界面是全英文的，有些用户会面临着一边抱着字典一边用grafana一边摸不清grafana要如何实现自己需求的窘境</li>
+<li>使用JMeter时，编写脚本在JMeter客户端上、压测在服务器上、查看结果在网页上。这整个压测过程比较割裂，如果可以整合在一起也比较方便用户</li>
+</ol>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://nanagan.github.io/post/jmeter-test/" class="post-title gt-a-link">
+                    在Mac上利用压测工具Jmeter-Suite进行一次压测实践的保姆级详细步骤（参考腾讯云文章）
+                </a>
+            </div>
+        
+
+        
+            <span id="/post/18246586/" class="leancloud_visitors" data-flag-title="浅谈不同压测平台的使用体验（对比JMeter）">
+                <em class="post-meta-item-text">阅读量 </em>
+                <i class="leancloud-visitors-count">0</i>
+            </span>
+        
+
+        
+
+        
+            <script src='https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js'></script>
+
+<style>
+	div#vcomments{
+		width:100%;
+		max-width: 1000px;
+		padding: 2.5%
+	}
+</style>
+
+
+	<div id="vcomments"></div>
+
+<script>
+	new Valine({
+		el: '#vcomments',
+		appId: 'Fwb8Sh0if5a89ivip2D7ltLE-gzGzoHsz',
+		appKey: 'yKd7GvF6flIjh1opobdCmzdI',
+		avatar: '',
+		pageSize: 5,
+		recordIp: false,
+		placeholder: '欢迎留言👏',
+		visitor: true,
+	});
+</script>
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">鹅厂低级工程师（大雾</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://nanagan.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>
