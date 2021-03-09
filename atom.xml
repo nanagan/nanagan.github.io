@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://nanagan.github.io</id>
     <title>Nana&apos;s Blog</title>
-    <updated>2021-03-09T07:31:28.482Z</updated>
+    <updated>2021-03-09T08:40:46.248Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://nanagan.github.io"/>
     <link rel="self" href="https://nanagan.github.io/atom.xml"/>
@@ -16,7 +16,15 @@
         <link href="https://nanagan.github.io/post/kubernetes-k6/">
         </link>
         <updated>2021-03-09T07:20:26.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="具体步骤">具体步骤</h1>
+        <content type="html"><![CDATA[<h1 id="k6介绍">k6介绍</h1>
+<p>k6是一款使用go语言编写的开源测试工具，支持用户编写测试脚本，解决了JMeter不易代码化的缺点。它的主要特点有</p>
+<ul>
+<li>提供了友好的 CLI 工具</li>
+<li>使用 JavaScript 代码编写测试用例</li>
+<li>可以根据性能条件设置阈值，表明成功还是失败</li>
+</ul>
+<p>另外，k6不能直接使用 npm 包以及 Nodejs 提供的一些 API，因为它是通过golang程序包裹了javaScript运行js脚本的。</p>
+<h1 id="具体步骤">具体步骤</h1>
 <p>以下是配置k6的具体步骤。</p>
 <h2 id="前置条件">前置条件</h2>
 <ol>
