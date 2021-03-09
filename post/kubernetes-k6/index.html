@@ -4,7 +4,7 @@
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-<title>关于 | Nana&#39;s Blog</title>
+<title>在Kubernetes上部署k6的详细步骤 | Nana&#39;s Blog</title>
 
 <link rel="shortcut icon" href="https://nanagan.github.io/favicon.ico?v=1615274526411">
 
@@ -89,37 +89,140 @@
         <div class="post-detail gt-bg-theme-color-second">
             <article class="gt-post-content">
                 <h2 class="post-title">
-                    关于
+                    在Kubernetes上部署k6的详细步骤
                 </h2>
                 <div class="post-info">
                     <time class="post-time gt-c-content-color-first">
-                        · 2019-01-25 ·
+                        · 2021-03-09 ·
                     </time>
+                    
+                        <a href="https://nanagan.github.io/tag/L2_5xxyiA/" class="post-tags">
+                            # 压测
+                        </a>
                     
                 </div>
                 <div class="post-content">
-                    <blockquote>
-<p>欢迎来到俺的窝呀，很高兴遇见你！🤝</p>
+                    <h1 id="具体步骤">具体步骤</h1>
+<h2 id="前置条件">前置条件</h2>
+<ol>
+<li>
+<p>下载kubectl</p>
+<p><code>brew install kubectl</code></p>
+</li>
+<li>
+<p>安装helm</p>
+<p><code>brew install helm</code></p>
+</li>
+<li>
+<p>新建一个放置k6的文件夹</p>
+</li>
+</ol>
+<h2 id="配置并安装k6">配置并安装k6</h2>
+<ol>
+<li>
+<p>输入<code>vim k6-deployment.yaml</code></p>
+</li>
+<li>
+<p>在里面详细写出对k6的配置</p>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k6-deployment
+  labels:
+    app: k6
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k6
+  template:
+    metadata:
+      labels:
+        app: k6
+    spec:
+      containers:
+      - name: k6
+        image: loadimpact/k6
+        command: [&quot;tail&quot;,&quot;-f&quot;,&quot;/dev/null&quot;]
+        resources:
+          requests:
+            memory: &quot;64Mi&quot;
+            cpu: &quot;250m&quot;
+          limits:
+            memory: &quot;128Mi&quot;
+            cpu: &quot;500m&quot;
+
+
+</code></pre>
+</li>
+<li>
+<p>接着在k8s上部署k6，namespace的名字自己定义，<code>kubectl apply -f k6-deployment.yaml -n k6</code></p>
+<p>此时它会显示</p>
+<pre><code>deployment.apps/k6-deployment created
+</code></pre>
+<p>说明部署已经成功。</p>
+</li>
+<li>
+<p>输入<code>kubectl -n k6 exec -it k6-deployment-57fd465f75-wxfj8 /bin/sh</code>运行k6，运行成功后得到下图</p>
+<p>![image-20210309151300435](/Users/nanagan/Library/Application Support/typora-user-images/image-20210309151300435.png)</p>
+</li>
+</ol>
+<h2 id="进行压测">进行压测</h2>
+<ol>
+<li>
+<p><strong>编写脚本</strong></p>
+<p>此处使用k6官网上的测试脚本进行一次小压测，在终端输入<code>vi 脚本名称.js</code>，并在弹出来的窗口中输入脚本内容，此处使用的脚本为</p>
+<pre><code class="language-javascript">import http from 'k6/http';
+import { sleep } from 'k6';
+export default function () {
+  http.get('http://test.k6.io');
+  sleep(1);
+
+</code></pre>
+</li>
+<li>
+<p><strong>运行脚本</strong></p>
+<p>输入命令<code>k6 run 脚本名称.js</code>，然后显示</p>
+<p>![image-20210309151903678](/Users/nanagan/Library/Application Support/typora-user-images/image-20210309151903678.png)</p>
+<p>即压测成功。</p>
+</li>
+</ol>
+<h1 id="问题汇总">问题汇总</h1>
+<ol>
+<li>
+<p>如果输入<code>kubectl get pods -n k6</code>，却显示</p>
+<pre><code>NAME                             READY   STATUS             RESTARTS   AGE
+k6-deployment-84f77b464f-2qjkb   0/1     CrashLoopBackOff   1          23s
+</code></pre>
+<p>说明这个pod一直在重复着【启动，崩溃，再次启动，然后再次崩溃】的过程。</p>
+<p><strong>解决方法：</strong></p>
+<p>在<code>k6-deployment.yaml</code>文件里的container里加上<code>command: [&quot;tail&quot;,&quot;-f&quot;,&quot;/dev/null&quot;]</code>，这条命令的作用是保持容器一直处于运行状态，上面的yaml文件里已经加好了。</p>
+<blockquote>
+<p>注：此命令一般用于【 docker 容器中的进程(pid 1)没有在前台运行，如果前台没有任何进程运行，docker 会自动关闭自己】的情况</p>
 </blockquote>
-<h2 id="关于本站">🏠 关于本站</h2>
-<p>本菜菜子记录自己学习过程的地方，目前在学习压测相关内容，还有react也在学习计划里。</p>
-<h2 id="博主是谁">👨‍💻 博主是谁</h2>
-<p>默默在鹅厂实习的无名人士，江湖名号迷乱菜菜子（雾</p>
-<h2 id="兴趣爱好">⛹ 兴趣爱好</h2>
-<p>看小说（一年几千万字的阅读量）<br>
-写代码（但是水平比较菜）<br>
-打游戏（水平比写代码还菜）</p>
-<h2 id="联系我呀">📬 联系我呀</h2>
-<p>别联系我了吧）</p>
+<p>此时输入<code>kubectl get pods -n k6</code>，可以得到</p>
+<pre><code>NAME                             READY   STATUS        RESTARTS   AGE
+k6-deployment-57fd465f75-wxfj8   1/1     Running       0          9s
+k6-deployment-84f77b464f-2qjkb   0/1     Terminating   6          7m15s
+</code></pre>
+</li>
+</ol>
 
                 </div>
             </article>
         </div>
 
         
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://nanagan.github.io/post/18246586/" class="post-title gt-a-link">
+                    浅谈不同压测平台的使用体验（对比JMeter）
+                </a>
+            </div>
+        
 
         
-            <span id="/post/about/" class="leancloud_visitors" data-flag-title="关于">
+            <span id="/post/kubernetes-k6/" class="leancloud_visitors" data-flag-title="在Kubernetes上部署k6的详细步骤">
                 <em class="post-meta-item-text">阅读量 </em>
                 <i class="leancloud-visitors-count">0</i>
             </span>
